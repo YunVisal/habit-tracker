@@ -1,10 +1,12 @@
-import AuthProvider from "./contexts/auth-provider"
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import theme from "./theme";
 import AppRouter from "./routes/router"
 
 const App = () => {
-  return <AuthProvider>
+  return <ThemeProvider theme={theme}>
+    <CssBaseline />
     <AppRouter />
-  </AuthProvider>
+  </ThemeProvider>
 }
 
 export default App;
