@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { supabase } from "../../../utils/supabase";
+import { supabase } from "../../utils/supabase";
 import type { User } from "@supabase/supabase-js";
-import { AuthContext } from "../../../contexts/auth_context";
+import { AuthContext } from "../../contexts/auth_context";
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState<User | undefined>(undefined);
