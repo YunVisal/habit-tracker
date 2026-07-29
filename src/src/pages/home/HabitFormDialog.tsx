@@ -1,5 +1,7 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField, Typography } from "@mui/material"
 import { Controller, useForm } from 'react-hook-form';
+import { supabase } from "../../utils/supabase";
+import { useAuth } from "../../hooks/use_auth";
 
 interface HabitFormDialogProps {
     handleClose: () => void;
@@ -18,9 +20,19 @@ const HabitFormDialog: React.FC<HabitFormDialogProps> = ({ handleClose }) => {
             description: ""
         }
     })
+    const { user, loading } = useAuth();
 
-    const createHabit = (formData: HabitFormField) => {
-        console.log(formData);
+    const createHabit = async (formData: HabitFormField) => {
+        if (user == null) {
+            setError('root.serverError', { message: "Please login first before create the habit!" });
+            return;
+        }
+
+        const { error } = await supabase.from('habits').insert({ ...formData, user_id: user.id });
+        if (error) {
+            setError('root.serverError', { message: "Something went wrong at our end!" });
+            return;
+        }
         handleClose()
     }
 
@@ -60,6 +72,7 @@ const HabitFormDialog: React.FC<HabitFormDialogProps> = ({ handleClose }) => {
                                 focused />
                         }
                     />
+                    {errors.root?.serverError && <Typography variant="caption" color="error">{errors.root.serverError.message}</Typography>}
                 </Stack>
             </Box>
         </DialogContent>
