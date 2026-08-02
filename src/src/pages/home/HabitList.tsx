@@ -10,6 +10,7 @@ import type { Habit } from "../../contexts/habit_context/type";
 import HabitFormDialog from "./HabitFormDialog";
 import DeleteHabitConfirmationDialog from "./DeleteHabitConfirmationDialog";
 import EmptyHabitContainer from "./EmptyHabitContainer";
+import HabitListItem from "./HabitListItem";
 
 const HabitList = () => {
 
@@ -23,7 +24,7 @@ const HabitList = () => {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [selectedHabit, setSelectedHabit] = useState<Habit | null>(null);
 
-    const handleClick = (event: React.MouseEvent<HTMLElement>, habit: Habit) => {
+    const openMenu = (event: React.MouseEvent<HTMLElement>, habit: Habit) => {
         setAnchorEl(event.currentTarget);
         setMenuHabit(habit);
     };
@@ -59,22 +60,7 @@ const HabitList = () => {
         {habits?.length == 0 ? <EmptyHabitContainer /> : <Paper sx={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
             <List>
                 {habits?.map(habit => <Fragment key={habit.id}>
-                    <ListItem
-                        key={habit.id}
-                        alignItems="flex-start"
-                        secondaryAction={
-                            <IconButton onClick={(event) => handleClick(event, habit)}>
-                                <MoreVertIcon />
-                            </IconButton>}
-                    >
-                        <ListItemAvatar>
-                            <Avatar sx={{ backgroundColor: stringToColor(habit.name) }}>{habit.name[0]}</Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                            primary={<Typography variant="h6"><b>{habit.name}</b></Typography>}
-                            secondary={<Typography variant="body2" sx={{ color: "#00000094" }}>{habit.description || <i className="text-[#00000057]">No Description</i>}</Typography>}
-                        />
-                    </ListItem>
+                    <HabitListItem habit={habit} handleOpenMenu={openMenu} />
                     <Divider variant="inset" component="li" />
                 </Fragment>)}
             </List>
